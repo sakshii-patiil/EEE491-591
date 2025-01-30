@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.integrate import quad  # Import the quad function
 
 # Define the polynomial function
 def polynomial(x, a, b, c):
@@ -9,7 +10,7 @@ def polynomial(x, a, b, c):
 def integral_polynomial(r, a, b, c):
     result = np.zeros_like(r)
     for i, ri in enumerate(r):
-        result[i], _ = quad(polynomial, 0, ri, args=(a, b, c))
+        result[i], _ = quad(polynomial, 0, ri, args=(a, b, c))  # Use quad here
     return result
 
 # Define the range of r values
@@ -30,7 +31,7 @@ plt.plot(r_values, integral_values2, label=f'a={a2}, b={b2}, c={c2}')
 # Add labels, title, and legend
 plt.xlabel('r')
 plt.ylabel('Integral Value')
-plt.title('Integral of Polynomial from 0 to r')
+plt.title('hw2 poly')
 plt.legend()
 
 # Show the plot
