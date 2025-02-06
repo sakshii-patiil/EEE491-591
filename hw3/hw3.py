@@ -66,37 +66,32 @@ def stamper(y_add,netlist,currents,node_cnt):
                 y_add[i,i] += 1.0/comp[COMP.VAL]
             
             #EXTRA STUFF HERE!
-            if (j >= 0):                            # add 1/VAL for entries [i,i] & [j,j]
+            if (j >= 0):                            
                 y_add[j, j] += 1.0 / comp[COMP.VAL]
-            if (i >= 0 and j >= 0):                 # subtract 1/VAL for entries [i,j] & [j,i]
+            if (i >= 0 and j >= 0):                
                 y_add[i, j] -= 1.0 / comp[COMP.VAL]
                 y_add[j, i] -= 1.0 / comp[COMP.VAL]
         
-        elif (comp[COMP.TYPE] == COMP.VS):          # if component is a voltage source
+        elif (comp[COMP.TYPE] == COMP.VS):          
             node_cnt += 1
-            M = node_cnt                            # Number of rows in admittance matrix
-            if (i>= 0):                             # Set entries [M,i] and [i,M] to 1
+            M = node_cnt                            
+            if (i>= 0):                            
                 y_add[M-1, i] = 1.0
                 y_add[i, M-1] = 1.0
-            if (j >= 0):                            # Set entries [M,j] and [j,M] to -1
+            if (j >= 0):                            
                 y_add[M-1, j] = -1.0
                 y_add[j, M-1] = -1.0
 
-            # Add another row to the currents matrix
-            # Set entry [M] to VAL
             currents[M-1] = comp[COMP.VAL]
-
-            # Add another row to the voltage matrix
-            # Set entry [M] to 0
             voltages[M-1] = 0
 
-        elif (comp[COMP.TYPE] == COMP.IS):          # if component is a current source
-            if (i >= 0):                            # Subtract I at entry [i] in the current matrix
+        elif (comp[COMP.TYPE] == COMP.IS):          
+            if (i >= 0):                            
                 if (comp[COMP.VAL] >= 0):
                     currents[i] -= 1.0 * comp[COMP.VAL]
                 else:
                     currents[i] += 1.0 * comp[COMP.VAL]
-            if (j >= 0):                            # Add I at entry [j] in the current matrix
+            if (j >= 0):                           
                 if(comp[COMP.VAL] >= 0):
                     currents[j] += 1.0 * comp[COMP.VAL]
                 else:
@@ -129,4 +124,3 @@ node_count = stamper(admittance, netlist, currents, nodes_count)
 
 voltages = solve(admittance, currents)
 print(voltages)
-# print('Voltage Vector =', voltages)
