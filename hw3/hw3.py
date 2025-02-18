@@ -91,12 +91,15 @@ def stamper(y_add,netlist,currents,node_cnt):
                     currents[i] -= 1.0 * comp[COMP.VAL]
                 else:
                     currents[i] += 1.0 * comp[COMP.VAL]
-            if (j >= 0):                           
+            if (j >= 0):                            # Add I at entry [j] in the current matrix
                 if(comp[COMP.VAL] >= 0):
                     currents[j] += 1.0 * comp[COMP.VAL]
                 else:
                     currents[j] -= 1.0 * comp[COMP.VAL]
 
+    print('Admittance Matrix =', y_add)
+    print('Voltage Matrix =', voltages)
+    print('Currents Matrix =', currents)
     return node_cnt  # should be same as number of rows!
 
 ################################################################################
@@ -124,3 +127,4 @@ node_count = stamper(admittance, netlist, currents, nodes_count)
 
 voltages = solve(admittance, currents)
 print(voltages)
+# print('Voltage Vector =', voltages)
