@@ -5,18 +5,15 @@ import matplotlib
 matplotlib.use("TkAgg")
 import matplotlib.pyplot as plt
 
-# Constants
 MAX_YEARS = 70
 
-# Function to perform the wealth calculation and plotting
-def calculate_wealth():
     try:
-        r = float(entry_return.get())  # Mean return (%)
-        sigma = float(entry_std_dev.get())  # Std dev return (%)
-        Y = float(entry_contribution.get())  # Yearly contribution ($)
-        years_contribute = int(entry_years_contribute.get())  # No. of years of contribution
-        years_to_retirement = int(entry_years_retirement.get())  # No. of years to retirement
-        S = float(entry_spend.get())  # Annual spend in retirement ($)
+        r = float(entry_return.get())  
+        sigma = float(entry_std_dev.get()) 
+        Y = float(entry_contribution.get())  
+        years_contribute = int(entry_years_contribute.get()) 
+        years_to_retirement = int(entry_years_retirement.get()) 
+        S = float(entry_spend.get())  
     except ValueError:
         messagebox.showerror("Input Error", "Please enter valid numeric values.")
         return
@@ -25,24 +22,24 @@ def calculate_wealth():
         messagebox.showerror("Input Error", "Years of contribution cannot exceed years to retirement.")
         return
     
-    np.random.seed(42)  # Fixed seed for reproducibility
+    np.random.seed(42) 
     
     wealth_results = []
     plt.figure(figsize=(10, 5))
     
-    for _ in range(10):  # Run 10 simulations
+    for _ in range(10): 
         noise = (sigma / 100) * np.random.randn(MAX_YEARS)
-        wealth = np.zeros(MAX_YEARS + 1)  # Track wealth over 70 years
+        wealth = np.zeros(MAX_YEARS + 1)
         
         for i in range(MAX_YEARS):
-            if i < years_contribute:  # During contribution years
+            if i < years_contribute: 
                 wealth[i+1] = max(wealth[i] * (1 + r / 100 + noise[i]) + Y, 0)
-            elif i < years_to_retirement:  # After contributions but before retirement
+            elif i < years_to_retirement: 
                 wealth[i+1] = max(wealth[i] * (1 + r / 100 + noise[i]), 0)
-            else:  # Retirement phase (withdrawals start)
+            else: 
                 wealth[i+1] = max(wealth[i] * (1 + r / 100 + noise[i]) - S, 0)
                 if wealth[i+1] == 0:
-                    break  # Stop if wealth runs out
+                    break 
         
         wealth_results.append(wealth[years_to_retirement])
         plt.plot(range(i + 2), wealth[:i + 2], label=f"Run {_+1}")
@@ -57,7 +54,6 @@ def calculate_wealth():
     plt.grid()
     plt.show(block=False)
 
-# GUI Setup
 root = tk.Tk()
 root.title("Wealth Calculator")
 
